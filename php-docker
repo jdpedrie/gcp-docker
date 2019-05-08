@@ -1,0 +1,28 @@
+function phpd() {
+    file="/gcp/${1}"
+    version=${2:-"7.3"}
+    keyfile=${3:-"keyfile"}
+    grpc=${4:-"enable"}
+    protobuf=${5:-"enable"}
+
+    KEY="$keyfile" \
+    PHP_VERSION="$version" \
+    GRPC="$grpc" \
+    PROTOBUF="$protobuf" \
+    docker-compose -f /Users/jdp/Projects/docker-dev/docker-compose.yml run \
+    php php $file
+}
+
+function phpdbuild() {
+    file="/gcp/${1}"
+    version=${2:-"7.3"}
+    keyfile=${3:-"keyfile"}
+    grpc=${4:-"enable"}
+    protobuf=${5:-"enable"}
+
+    KEY="$keyfile" \
+    PHP_VERSION="$version" \
+    GRPC="$grpc" \
+    PROTOBUF="$protobuf" \
+    docker-compose -f /Users/jdp/Projects/docker-dev/docker-compose.yml build
+}
