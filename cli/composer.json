@@ -1,0 +1,17 @@
+{
+    "name": "jdp/cli",
+    "require": {
+        "symfony/console": "^4.2"
+    },
+    "authors": [
+        {
+            "name": "John Pedrie",
+            "email": "john@pedrie.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cli\\": "src"
+        }
+    }
+}

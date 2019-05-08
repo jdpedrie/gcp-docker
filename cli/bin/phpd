@@ -1,0 +1,15 @@
+#!/usr/bin/env php
+<?php
+
+include __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$app = new Application;
+$app->add(new Cli\Build);
+$app->add(new Cli\Cmd);
+$app->add(new Cli\Composer);
+$app->add(new Cli\Run);
+$app->add(new Cli\Test);
+
+$app->run();
