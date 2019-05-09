@@ -24,21 +24,8 @@ class Composer extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $defaults = $this->getDefaults();
-
         $cmd = sprintf(
-            implode(" \\\n", [
-                'KEY="%s"',
-                'PHP_VERSION="%s"',
-                'GRPC="%s"',
-                'PROTOBUF="%s"',
-                'docker-compose -f %s run php %s',
-            ]),
-            $input->getOption('keyfile'),
-            $input->getOption('php'),
-            $input->getOption('withoutGrpc') ? 'disabled': 'enabled',
-            $input->getOption('withoutProtobuf') ? 'disabled': 'enabled',
-            $defaults['composeFile'],
+            'run php %s',
             sprintf(
                 '/bin/bash -c "cd /gcp/%s; composer %s"',
                 $input->getArgument('path'),
@@ -46,8 +33,6 @@ class Composer extends Command
             )
         );
 
-        // echo $cmd;exit;
-
-        $this->exec($cmd);
+        $this->exec($input, $cmd);
     }
 }

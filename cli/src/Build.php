@@ -23,24 +23,11 @@ class Build extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $defaults = $this->getDefaults();
-
         $cmd = sprintf(
-            implode(" \\\n", [
-                'KEY="%s"',
-                'PHP_VERSION="%s"',
-                'GRPC="%s"',
-                'PROTOBUF="%s"',
-                'docker-compose -f %s build %s',
-            ]),
-            $input->getOption('keyfile'),
-            $input->getOption('php'),
-            $input->getOption('withoutGrpc') ? 'disabled': 'enabled',
-            $input->getOption('withoutProtobuf') ? 'disabled': 'enabled',
-            $defaults['composeFile'],
-            $input->getOption('withoutCache') ? '--no-cache': ''
+            'build %s',
+            $input->getOption('withoutCache') ? '--no-cache' : ''
         );
 
-        $this->exec($cmd);
+        $this->exec($input, $cmd);
     }
 }

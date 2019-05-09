@@ -22,25 +22,11 @@ class Run extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $defaults = $this->getDefaults();
-
         $cmd = sprintf(
-            implode(" \\\n", [
-                'KEY="%s"',
-                'PHP_VERSION="%s"',
-                'GRPC="%s"',
-                'PROTOBUF="%s"',
-                'docker-compose -f %s run',
-                'php php /gcp/%s'
-            ]),
-            $input->getOption('keyfile'),
-            $input->getOption('php'),
-            $input->getOption('withoutGrpc') ? 'disabled': 'enabled',
-            $input->getOption('withoutProtobuf') ? 'disabled': 'enabled',
-            $defaults['composeFile'],
+            'run php php /gcp/%s',
             $input->getArgument('path')
         );
 
-        $this->exec($cmd);
+        $this->exec($input, $cmd);
     }
 }

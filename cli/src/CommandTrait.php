@@ -2,6 +2,7 @@
 
 namespace Cli;
 
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 trait CommandTrait
@@ -30,6 +31,11 @@ trait CommandTrait
             'withoutProtobuf',
             null,
             InputOption::VALUE_NONE
+        )->addOption(
+            'extension',
+            'e',
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            'PECL extensions to install.'
         );
     }
 
@@ -44,8 +50,39 @@ trait CommandTrait
         return $defaults;
     }
 
-    private function exec($cmd)
+    private function sharedEnvVars(InputInterface $input)
     {
+        $extensions = $input->getOption('extension');
+        $extensions = is_array($extensions)
+            ? implode(' ', $extensions)
+            : $extensions;
+
+        $imageId = md5(json_encode($input->getOptions()));
+
+        return sprintf(
+            implode(" \\\n", [
+                'KEY="%s"',
+                'PHP_VERSION="%s"',
+                'GRPC="%s"',
+                'PROTOBUF="%s"',
+                'EXTENSIONS="%s"',
+                'IMAGE_ID="%s"',
+            ]),
+            $input->getOption('keyfile'),
+            $input->getOption('php'),
+            $input->getOption('withoutGrpc') ? 'disabled' : 'enabled',
+            $input->getOption('withoutProtobuf') ? 'disabled' : 'enabled',
+            $extensions,
+            $imageId
+        );
+    }
+
+    private function exec(InputInterface $input, $cmd)
+    {
+        $vars = $this->sharedEnvVars($input);
+        $compose = sprintf('docker-compose -f %s', $this->getDefaults()['composeFile']);
+        $cmd = $vars . ' \\' . PHP_EOL . $compose . ' ' . $cmd;
+
         while (@ob_end_flush()); // end all output buffers if any
 
         $proc = popen($cmd, 'r');

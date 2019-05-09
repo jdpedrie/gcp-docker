@@ -10,13 +10,14 @@ services:
       links:
         - php
   php:
-      image: dev-php-php${PHP_VERSION}-grpc-${GRPC}-protobuf-${PROTOBUF}
+      image: phpd-${IMAGE_ID}
       build:
         context: ./php
         args:
           GRPC: ${GRPC}
           PROTOBUF: ${PROTOBUF}
           PHP_VERSION: ${PHP_VERSION}
+          EXTENSIONS: ${EXTENSIONS}
       volumes:
         - ./gcp:/gcp
       environment:

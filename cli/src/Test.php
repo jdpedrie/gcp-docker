@@ -25,8 +25,6 @@ class Test extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $defaults = $this->getDefaults();
-
         $options = [];
         if ($input->getOption('group')) {
             $options[] = '--group=' . $input->getOption('group');
@@ -37,18 +35,7 @@ class Test extends Command
         }
 
         $cmd = sprintf(
-            implode(" \\\n", [
-                'KEY="%s"',
-                'PHP_VERSION="%s"',
-                'GRPC="%s"',
-                'PROTOBUF="%s"',
-                'docker-compose -f %s run %s',
-            ]),
-            $input->getOption('keyfile'),
-            $input->getOption('php'),
-            $input->getOption('withoutGrpc') ? 'disabled': 'enabled',
-            $input->getOption('withoutProtobuf') ? 'disabled': 'enabled',
-            $defaults['composeFile'],
+            'run %s',
             sprintf(
                 'php /bin/bash -c "cd /gcp/%s; vendor/bin/phpunit %s"',
                 $input->getArgument('path'),
@@ -56,6 +43,6 @@ class Test extends Command
             )
         );
 
-        $this->exec($cmd);
+        $this->exec($input, $cmd);
     }
 }
