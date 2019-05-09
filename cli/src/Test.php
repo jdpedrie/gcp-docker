@@ -18,7 +18,8 @@ class Test extends Command
             ->setDescription('Run PHPUnit tests')
             ->addArgument('path', InputArgument::REQUIRED, 'The path of the project, relative to the workspace root.')
             ->addOption('group', 'g', InputOption::VALUE_OPTIONAL, 'Test group to execute')
-            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Test suite to execute');
+            ->addOption('suite', 's', InputOption::VALUE_OPTIONAL, 'Test suite to execute')
+            ->addOption('coverage', 'c', InputOption::VALUE_NONE, 'Whether to create coverage reports.');
 
         $this->addOptions();
     }
@@ -32,6 +33,14 @@ class Test extends Command
 
         if ($input->getOption('suite')) {
             $options[] = '-c phpunit-' . $input->getOption('suite') . '.xml.dist';
+        }
+
+        if ($input->getOption('coverage')) {
+            $options[] = sprintf(
+                '--coverage-html=/gcp/%s/%s',
+                $input->getArgument('path'),
+                $this->getDefaults()['coverage']
+            );
         }
 
         $cmd = sprintf(
