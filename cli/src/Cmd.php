@@ -5,7 +5,6 @@ namespace Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Cmd extends Command
@@ -24,7 +23,8 @@ class Cmd extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $cmd = sprintf(
-            'run php /gcp/%s',
+            'run php %s/%s',
+            $this->getDefaults()['codeRoot'],
             $input->getArgument('path')
         );
 

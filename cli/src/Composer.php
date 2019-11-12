@@ -38,7 +38,8 @@ class Composer extends Command
         $cmd = sprintf(
             'run php %s',
             sprintf(
-                '/bin/bash -c "cd /gcp/%s; composer %s"',
+                '/bin/bash -c "cd %s/%s; composer %s"',
+                $this->getDefaults()['codeRoot'],
                 $input->getArgument('path'),
                 $args
             )

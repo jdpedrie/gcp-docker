@@ -2,5 +2,7 @@
     "composeFile": "/Users/jdp/.phpd/docker-compose.yml",
     "phpVersion": 7.3,
     "keyfile": "gcp-keyfile",
-    "coverage": ".gcp"
+    "coverage": ".gcp",
+    "codeRoot": "/code",
+    "workspaceDir": "/Users/jdp/Projects/gcp"
 }

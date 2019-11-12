@@ -20,9 +20,11 @@ RUN if [ "$PROTOBUF" = "enable" ] ; then docker-php-ext-enable protobuf ; else e
 RUN if [ "$EXTENSIONS" != "" ] ; then pecl install $EXTENSIONS ; fi
 RUN if [ "$EXTENSIONS" != "" ] ; then docker-php-ext-enable $EXTENSIONS ; fi
 
+RUN docker-php-ext-install bcmath
+
 # skip xdebug on 5.4.
-RUN if [ `echo ${PHP_VERSION} | grep -c "5.4" ` -eq 0 ] ; then pecl install xdebug; fi
-RUN if [ `echo ${PHP_VERSION} | grep -c "5.4" ` -eq 0 ] ; then docker-php-ext-enable xdebug; fi
+# RUN if [ `echo ${PHP_VERSION} | grep -c "5.4" ` -eq 0 ] ; then pecl install xdebug; fi
+# RUN if [ `echo ${PHP_VERSION} | grep -c "5.4" ` -eq 0 ] ; then docker-php-ext-enable xdebug; fi
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer --version

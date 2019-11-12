@@ -23,7 +23,8 @@ class Run extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $cmd = sprintf(
-            'run php php /gcp/%s',
+            'run php php %s/%s',
+            $this->getDefaults()['codeRoot'],
             $input->getArgument('path')
         );
 

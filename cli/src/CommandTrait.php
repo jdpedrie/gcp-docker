@@ -24,11 +24,11 @@ trait CommandTrait
             'The keyfile name (without .json) to use as default credentials. Relative to $workspaceRoot/keys.',
             $defaults['keyfile']
         )->addOption(
-            'withoutGrpc',
+            'without-grpc',
             null,
             InputOption::VALUE_NONE
         )->addOption(
-            'withoutProtobuf',
+            'without-protobuf',
             null,
             InputOption::VALUE_NONE
         )->addOption(
@@ -67,20 +67,29 @@ trait CommandTrait
                 'PROTOBUF="%s"',
                 'EXTENSIONS="%s"',
                 'IMAGE_ID="%s"',
+                'CODE_ROOT="%s"',
+                'WORKSPACE_DIR="%s"',
             ]),
             $input->getOption('keyfile'),
             $input->getOption('php'),
-            $input->getOption('withoutGrpc') ? 'disabled' : 'enabled',
-            $input->getOption('withoutProtobuf') ? 'disabled' : 'enabled',
+            $input->getOption('without-grpc') ? 'disable' : 'enable',
+            $input->getOption('without-protobuf') ? 'disable' : 'enable',
             $extensions,
-            $imageId
+            $imageId,
+            $this->getDefaults()['codeRoot'],
+            $this->getDefaults()['workspaceDir']
         );
     }
 
     private function exec(InputInterface $input, $cmd)
     {
         $vars = $this->sharedEnvVars($input);
-        $compose = sprintf('docker-compose -f %s', $this->getDefaults()['composeFile']);
+        $compose = sprintf(
+            'CODE_ROOT=%s WORKSPACE_DIR=%s docker-compose -f %s',
+            $this->getDefaults()['codeRoot'],
+            $this->getDefaults()['workspaceDir'],
+            $this->getDefaults()['composeFile']
+        );
         $cmd = $vars . ' \\' . PHP_EOL . $compose . ' ' . $cmd;
 
         while (@ob_end_flush()); // end all output buffers if any
